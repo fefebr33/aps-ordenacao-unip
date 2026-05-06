@@ -15,7 +15,7 @@ O objetivo deste projeto é analisar a eficiência de diferentes algoritmos de o
 ## Estrutura do Repositório
 
 - `main.c` - Código-fonte principal contendo as implementações e a rotina de testes.
-- `video_demo_aps.svg` - Vídeo demonstrativo da execução do programa (animação SVG interativa).
+- `video_execucao_aps.mp4` - Vídeo demonstrativo da execução do programa (animação SVG interativa).
 - `README.md` - Documentação do projeto.
 
 ## Vídeo Explicativo
