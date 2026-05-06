@@ -20,7 +20,7 @@ O objetivo deste projeto é analisar a eficiência de diferentes algoritmos de o
 
 ## Vídeo Explicativo
 
-O vídeo demonstrando o funcionamento da aplicação está disponível neste repositório no arquivo `video_demo_aps.svg`. Para visualizá-lo, basta abrir o arquivo diretamente no navegador.
+O vídeo demonstrando o funcionamento da aplicação está disponível neste repositório no arquivo `video_execucao_aps.mp4`. Para visualizá-lo, basta abrir o arquivo diretamente no navegador.
 
 O vídeo mostra:
 1. Compilação do código-fonte com GCC.
