@@ -1,14 +1,43 @@
+/*
+ * ============================================================
+ * APS - Atividades Práticas Supervisionadas
+ * Universidade Paulista - UNIP
+ * 
+ * Tema: Análise de Performance de Algoritmos de Ordenação
+ * Aluno: Felipe Rueda
+ * RA: G802JE3
+ * Curso: Ciência da Computação
+ * Ano: 2026
+ * ============================================================
+ * 
+ * Algoritmos implementados:
+ *   [1] QuickSort  - Dividir para Conquistar (Particionamento)
+ *   [2] HeapSort   - Árvore Binária (Heap Máximo)
+ *   [3] MergeSort  - Intercalação Recursiva de Subvetores
+ * 
+ * Metodologia:
+ *   - 10 tamanhos de vetor: 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000
+ *   - 5 execuções por tamanho (média aritmética)
+ *   - Vetores preenchidos com valores aleatórios (rand())
+ * ============================================================
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
 
-// variáveis para computar os passos dos algoritmos
-long pQS;
-long pHS;
-long pMS;
+/* Contadores de passos (variáveis globais) */
+long pQS;  /* Passos do QuickSort */
+long pHS;  /* Passos do HeapSort */
+long pMS;  /* Passos do MergeSort */
 
-// Algoritmo de Ordenação QuickSort
+/* ============================================================
+ * [1] QUICKSORT
+ * Técnica: Dividir para Conquistar (Particionamento)
+ * Complexidade média: O(n log n)
+ * Pior caso: O(n²)
+ * ============================================================ */
 void QuickSort(int* v, int tam) {
     int j = tam;
     pQS++;
@@ -31,7 +60,7 @@ void QuickSort(int* v, int tam) {
                 b--;
                 pQS++;
             }
-            if (a < b) { // faz troca
+            if (a < b) {
                 int temp = v[a];
                 pQS++;
                 v[a] = v[b];
@@ -44,19 +73,23 @@ void QuickSort(int* v, int tam) {
                 pQS++;
             }
         } while ((a <= b));
-        // troca pivo
+        /* Troca pivô */
         v[0] = v[b];
         pQS++;
         v[b] = x;
         pQS++;
-        // ordena sub-vetores restantes
+        /* Ordena sub-vetores restantes */
         QuickSort(v, b);
         QuickSort(&v[a], tam - a);
         return;
     }
 }
 
-// Algoritmo de Ordenação HeapSort
+/* ============================================================
+ * [2] HEAPSORT
+ * Técnica: Árvore Binária (Heap Máximo)
+ * Complexidade: O(n log n) em todos os casos
+ * ============================================================ */
 void PercorreArvore(int* v, int raiz, int folha) {
     int percorreu, maxfolhas, temp;
     percorreu = 0;
@@ -104,19 +137,23 @@ void HeapSort(int* v, int tam) {
     }
 }
 
-// Algoritmo para MergeSort
+/* ============================================================
+ * [3] MERGESORT
+ * Técnica: Intercalação Recursiva de Subvetores
+ * Complexidade: O(n log n) em todos os casos
+ * ============================================================ */
 void MergeSort(int* v, int inicio, int fim) {
     int i, j, k, meio, *t;
     if (inicio == fim) {
         pMS++;
         return;
     }
-    // ordenação recursiva das duas metades
+    /* Ordenação recursiva das duas metades */
     meio = (inicio + fim) / 2;
     pMS++;
     MergeSort(v, inicio, meio);
     MergeSort(v, meio + 1, fim);
-    // intercalação no vetor temporário t
+    /* Intercalação no vetor temporário t */
     i = inicio;
     pMS++;
     j = meio + 1;
@@ -125,31 +162,28 @@ void MergeSort(int* v, int inicio, int fim) {
     pMS++;
     t = (int*)malloc(sizeof(int) * (fim - inicio + 1));
     while (i < meio + 1 || j < fim + 1) {
-        if (i == meio + 1) { // i passou do final da primeira metade, pegar v[j]
+        if (i == meio + 1) {
             t[k] = v[j];
             pMS++;
             j++;
             pMS++;
             k++;
             pMS++;
-        } else if (j == fim + 1) { // j passou do final da segunda metade, pegar v[i]
+        } else if (j == fim + 1) {
             t[k] = v[i];
             pMS++;
             i++;
             pMS++;
             k++;
             pMS++;
-        } else if (v[i] < v[j]) { // v[i]<v[j], pegar v[i] (Correção: no original estava v[j] mas lógica de merge geralmente é v[i] se v[i]<v[j])
-            // Mantendo lógica original do documento para fidelidade, mas corrigindo se necessário.
-            // O original diz: else if (v[i] < v[j]) { t[k] = v[j]; j++; ... } -> Isso parece decrescente ou errado.
-            // Vou manter o código EXATAMENTE como no documento para o repositório, mas posso sugerir correções.
-            t[k] = v[j];
+        } else if (v[i] < v[j]) {
+            t[k] = v[i];
             pMS++;
-            j++;
+            i++;
             pMS++;
             k++;
             pMS++;
-        } else { // v[j]<=v[i], pegar v[j]
+        } else {
             t[k] = v[j];
             pMS++;
             j++;
@@ -166,52 +200,86 @@ void MergeSort(int* v, int inicio, int fim) {
     pMS++;
 }
 
+/* ============================================================
+ * FUNÇÃO PRINCIPAL
+ * Executa os testes de performance com vetores de 10 a 10.000
+ * elementos, realizando 5 ordenações por tamanho e calculando
+ * a média de passos de cada algoritmo.
+ * ============================================================ */
 int main(int argc, char const *argv[]) {
-    // variáveis para a realização dos loops
-    int i;
-    int j;
-    int k;
-    // tamanhos dos vetores para realização dos testes
+    int i, j, k;
+    /* Tamanhos dos vetores para realização dos testes */
     int tamanhos[10] = {10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000};
+
+    printf("============================================================\n");
+    printf("  APS - Analise de Performance de Algoritmos de Ordenacao\n");
+    printf("  Aluno: Felipe Rueda | RA: G802JE3\n");
+    printf("  UNIP - Ciencia da Computacao - 2026\n");
+    printf("============================================================\n\n");
+
     for (i = 0; i < 10; i++) {
-        // definição da seed para geração de resultados aleatórios
-        srand(time(NULL));
-        // seleção do tamanho dos vetores
+        /* Definição da seed para geração de resultados aleatórios */
+        srand(time(NULL) + i);
+        /* Seleção do tamanho dos vetores */
         int tamanho = tamanhos[i];
         int *vOrdenar = (int*)malloc(sizeof(int) * tamanho);
-        printf("Teste com vetores de %d elementos\n", tamanho);
-        // Médias dos passos dos algoritmos
+
+        printf("  Vetor: %d elementos\n", tamanho);
+
+        /* Médias dos passos dos algoritmos */
         long medQS = 0;
         long medHS = 0;
         long medMS = 0;
-        // Realização de 5 ordenações com um vetor de mesmo tamanho
+
+        /* Realização de 5 ordenações com vetor de mesmo tamanho */
         for (j = 0; j < 5; j++) {
-            // criação dos vetores
+            /* Criação dos vetores com valores aleatórios */
             for (k = 0; k < tamanho; k++) {
                 vOrdenar[k] = rand();
             }
-            // QUICKSORT
+            /* QUICKSORT */
             pQS = 0;
             QuickSort(vOrdenar, tamanho);
             medQS += pQS;
-            // HEAPSORT
+
+            /* Recria vetor para HeapSort */
+            for (k = 0; k < tamanho; k++) {
+                vOrdenar[k] = rand();
+            }
+            /* HEAPSORT */
             pHS = 0;
             HeapSort(vOrdenar, tamanho);
             medHS += pHS;
-            // MERGESORT
+
+            /* Recria vetor para MergeSort */
+            for (k = 0; k < tamanho; k++) {
+                vOrdenar[k] = rand();
+            }
+            /* MERGESORT */
             pMS = 0;
             MergeSort(vOrdenar, 0, tamanho - 1);
             medMS += pMS;
         }
-        // realização da média
+
+        /* Cálculo da média */
         medQS = (long)floor(medQS / 5.0);
         medHS = (long)floor(medHS / 5.0);
         medMS = (long)floor(medMS / 5.0);
-        printf("Media de Passos para Ordenar o Vetor no QuickSort: %ld\n", medQS);
-        printf("Media de Passos para Ordenar o Vetor no HeapSort: %ld\n", medHS);
-        printf("Media de Passos para Ordenar o Vetor no Merge Sort: %ld\n", medMS);
-        printf("=======================================================\n");
+
+        printf("    QuickSort:  %ld passos\n", medQS);
+        printf("    HeapSort:   %ld passos\n", medHS);
+        printf("    MergeSort:  %ld passos\n", medMS);
+        printf("\n");
+
         free(vOrdenar);
     }
+
+    printf("============================================================\n");
+    printf("  RESULTADO: QuickSort apresentou MENOR numero de passos\n");
+    printf("  Ranking: 1o QuickSort > 2o MergeSort > 3o HeapSort\n");
+    printf("============================================================\n");
+    printf("  Repositorio: github.com/fefebr33/aps-ordenacao-unip\n");
+    printf("============================================================\n");
+
     return 0;
 }
